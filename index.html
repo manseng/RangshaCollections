@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rangshacollections — Curated Affiliate Finds</title>
+    <!-- SVG Favicon for Browser Tabs -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%231C1A17%22/><text y=%22.9em%22 x=%2250%22 font-size=%2250%22 font-family=%22serif%22 font-weight=%22bold%22 fill=%22%23FBF9F5%22 text-anchor=%22middle%22>RC</text></svg>">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome for Icons -->
@@ -11,7 +13,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -28,7 +30,8 @@
                     fontFamily: {
                         serif: ['"Cormorant Garamond"', 'serif'],
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        logo: ['"Cinzel Decorative"', 'serif']
+                        logo: ['"Cinzel Decorative"', 'serif'],
+                        display: ['"Syne"', 'sans-serif']
                     }
                 }
             }
@@ -47,25 +50,49 @@
         .brand-logo-font {
             font-family: 'Cinzel Decorative', serif;
         }
-        .modern-heading {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        .luxury-heading {
+            font-family: 'Syne', sans-serif;
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-brand-accent selection:text-white">
 
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-brand-dark text-white px-4 py-2.5 rounded-lg shadow-xl text-xs uppercase tracking-wider flex items-center space-x-2 transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-message">Link copied to clipboard!</span>
+    </div>
+
     <!-- Header / Nav -->
     <header class="sticky top-0 z-40 bg-[#FBF9F5]/90 backdrop-blur-md border-b border-[#EBE5D8]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-20 sm:h-24 flex items-center justify-between">
-            <a href="#" class="flex items-center space-x-2 group">
-                <span class="text-xl sm:text-2xl lg:text-3xl text-brand-dark brand-logo-font tracking-wider">Rangsha<span class="text-brand-accent italic font-normal">collections</span></span>
+            <a href="#" class="flex items-center space-x-3 group">
+                <!-- Monogram Badge -->
+                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-brand-dark text-[#FBF9F5] flex items-center justify-center shadow-md group-hover:bg-brand-accent transition-colors duration-300">
+                    <span class="brand-logo-font text-sm sm:text-base font-bold tracking-tighter">RC</span>
+                </div>
+                
+                <!-- Text Brand Mark -->
+                <div class="flex flex-col">
+                    <span class="text-lg sm:text-2xl text-brand-dark brand-logo-font tracking-widest leading-none">RANGSHA</span>
+                    <span class="text-[9px] sm:text-[11px] text-brand-accent uppercase tracking-[0.35em] font-medium mt-1">Collections</span>
+                </div>
             </a>
 
             <div class="flex items-center space-x-6">
                 <button onclick="toggleWishlistModal()" class="group flex items-center space-x-2 text-brand-dark hover:text-brand-accent transition-colors focus:outline-none p-2">
                     <div class="relative">
                         <i class="fa-regular fa-heart text-xl sm:text-2xl transition-transform group-hover:scale-110"></i>
-                        <span id="wishlist-badge" class="absolute -top-1 -right-2 bg-brand-accent text-white text-[10px] sm:text-xs font-medium w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center hidden shadow-sm">0</span>
+                        <span id="wishlist-badge" class="absolute -top-1 -right-2 bg-red-600 text-white text-[10px] sm:text-xs font-medium w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center hidden shadow-sm">0</span>
                     </div>
                     <span class="hidden sm:inline text-xs uppercase tracking-widest font-medium">Saved (<span id="wishlist-count-text">0</span>)</span>
                 </button>
@@ -73,7 +100,7 @@
         </div>
     </header>
 
-    <!-- Editorial Hero Section -->
+    <!-- Editorial Hero Section (Locked to Exact Requested Text) -->
     <section class="py-12 sm:py-20 px-4 sm:px-6 text-center border-b border-[#EBE5D8] bg-gradient-to-b from-[#F7F4ED] to-[#FBF9F5]">
         <div class="max-w-2xl mx-auto space-y-4">
             <span class="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-brand-accent font-medium">Affiliate Discoveries</span>
@@ -86,18 +113,62 @@
         </div>
     </section>
 
-    <!-- Main Content: Product Grid -->
+    <!-- Main Content: Controls, Filters & Product Grid -->
     <main class="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-12 py-8 sm:py-16 w-full">
+        
+        <!-- Live Search Input -->
+        <div class="mb-6 max-w-md mx-auto sm:mx-0">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-muted text-xs"></i>
+                <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search finds (e.g., plaid, baggy, shirt)..." class="w-full bg-white border border-[#EBE5D8] focus:border-brand-dark pl-9 pr-8 py-2.5 rounded-full text-xs text-brand-dark focus:outline-none transition-colors">
+                <button id="clear-search" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-brand-muted hover:text-brand-dark">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Category Filter Bar -->
+        <div class="mb-8">
+            <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar pb-2 pt-1 border-b border-[#EBE5D8]" id="filter-bar">
+                <!-- Dynamically rendered via Javascript -->
+            </div>
+        </div>
+
         <div class="flex flex-col sm:flex-row justify-between items-baseline mb-6 sm:mb-10 border-b border-[#EBE5D8] pb-4">
-            <h2 class="text-lg sm:text-xl lg:text-2xl modern-heading font-semibold text-brand-dark">Editorial Closet</h2>
+            <h2 class="text-lg sm:text-xl lg:text-2xl luxury-heading font-bold tracking-wide text-brand-dark">Editorial Closet</h2>
             <span id="product-count" class="text-[10px] sm:text-xs uppercase tracking-widest text-brand-muted mt-2 sm:mt-0">Loading products...</span>
         </div>
 
-        <!-- 2 Columns on mobile, 3 columns on laptops -->
+        <!-- Product Grid -->
         <div id="product-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8 lg:gap-x-8 lg:gap-y-16">
             <!-- Injected via JavaScript -->
         </div>
     </main>
+
+    <!-- About the Curator / Owner Section -->
+    <section class="border-t border-b border-[#EBE5D8] bg-[#F4EFE6]/50 py-16 px-4 sm:px-6 my-12">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8 lg:gap-12">
+            <!-- MR Monogram Circle for Manseng Rangsha -->
+            <div class="w-32 h-32 sm:w-44 sm:h-44 rounded-full bg-brand-dark text-[#FBF9F5] flex flex-col items-center justify-center shadow-xl shrink-0 border-4 border-white">
+                <span class="brand-logo-font text-3xl sm:text-4xl tracking-widest font-bold">MR</span>
+                <span class="text-[8px] sm:text-[9px] tracking-[0.2em] uppercase mt-1 text-brand-accent font-semibold">Founder & Curator</span>
+            </div>
+
+            <!-- Curator Bio Text -->
+            <div class="space-y-3 text-center md:text-left">
+                <span class="text-[10px] uppercase tracking-[0.3em] text-brand-accent font-bold">Behind the Brand</span>
+                <h3 class="text-2xl sm:text-3xl luxury-heading font-bold text-brand-dark">Curated by Manseng Rangsha</h3>
+                <p class="text-brand-muted text-xs sm:text-sm font-light leading-relaxed">
+                    Founded by <strong>Manseng Rangsha</strong>, Rangshacollections was created out of a passion for modern streetwear, oversized silhouettes, and trending everyday fashion. We hand-pick and curate the best fashion and lifestyle deals across Amazon, Flipkart, Myntra, Ajio, and more—making it effortless for you to find top quality picks in one single archive.
+                </p>
+                <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-4 text-xs font-medium text-brand-dark uppercase tracking-wider">
+                    <span class="inline-flex items-center space-x-1"><i class="fa-solid fa-check text-brand-accent"></i> <span>Streetwear & Oversized</span></span>
+                    <span class="inline-flex items-center space-x-1"><i class="fa-solid fa-check text-brand-accent"></i> <span>Curated Archive</span></span>
+                    <span class="inline-flex items-center space-x-1"><i class="fa-solid fa-check text-brand-accent"></i> <span>Direct Partner Links</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Wishlist Side Drawer -->
     <div id="wishlist-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
@@ -126,13 +197,17 @@
         </div>
     </div>
 
-    <!-- Aesthetic Footer -->
+    <!-- Aesthetic Footer with Affiliate Disclaimer -->
     <footer class="border-t border-[#EBE5D8] py-10 sm:py-12 text-center text-[11px] sm:text-xs tracking-widest text-brand-muted uppercase bg-[#F7F4ED]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 space-y-3">
             <div class="flex items-center justify-center space-x-1">
                 <span class="text-lg text-brand-dark brand-logo-font">Rangshacollections</span>
             </div>
-            <p>&copy; 2026 Rangshacollections. Collection by Rangsha.</p>
+            <p>&copy; 2026 Rangshacollections. Curated by Manseng Rangsha.</p>
+            <p class="text-[9px] sm:text-[10px] text-stone-400 max-w-md mx-auto normal-case tracking-normal pt-1">
+                <i class="fa-solid fa-circle-info mr-1"></i>
+                Affiliate Disclosure: As an affiliate partner, we may earn a small commission from qualifying purchases made through our curated links at no additional cost to you.
+            </p>
         </div>
     </footer>
 
@@ -143,6 +218,7 @@
                 id: 1,
                 title: "RoseSeek Men's Cropped Plaid Number Graphic Button Down Shirts Short Sleeve Retro Preppy Crop Tops",
                 store: "Amazon",
+                category: "Shirts",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/shirt4.jpeg?raw=true",
                 link: "https://amzn.to/4rFLKxL"
             },
@@ -150,6 +226,7 @@
                 id: 2,
                 title: "Men's Oversized Fit Solid Lapel Collar Casual Shirt",
                 store: "Flipkart",
+                category: "Shirts",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/shirt.png?raw=true",
                 link: "https://fktr.in/Vmlj6C7"
             },
@@ -157,6 +234,7 @@
                 id: 3,
                 title: "Striped Long Sleeves Polo Collar T-Shirt",
                 store: "Myntra",
+                category: "Oversized Tees",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/tshirt2.png?raw=true",
                 link: "https://myntr.it/Bm633e9"
             },
@@ -164,6 +242,7 @@
                 id: 4,
                 title: "Unisex Runes in Progress LS Oversized Tee",
                 store: "Myntra",
+                category: "Oversized Tees",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/tshirt3.jpeg?raw=true",
                 link: "https://myntr.it/iusEA6B"
             },
@@ -171,6 +250,7 @@
                 id: 5,
                 title: "Men Graphic Print Round Neck Cotton Blend Black T-Shirt",
                 store: "Flipkart",
+                category: "Oversized Tees",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/tshirt.png?raw=true",
                 link: "https://fktr.in/6Z7QAxP"
             },
@@ -178,6 +258,7 @@
                 id: 6,
                 title: "Hauntrex Ritual Error LS Oversized Tee",
                 store: "Myntra",
+                category: "Oversized Tees",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/tshirt5.jpeg?raw=true",
                 link: "https://myntr.it/fy4vjsb"
             },
@@ -185,27 +266,31 @@
                 id: 7,
                 title: "Men Lapel Collar Short Sleeve Striped Shirt",
                 store: "Shein",
+                category: "Shirts",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/shirt2.jpeg?raw=true",
-                link: "Check out Shein Men Lapel Collar Short Sleeve Striped Shirt on SHEIN!!: https://www.sheinindia.in/p/443407177_bluewhite?utm_source=share&utm_medium=share"
+                link: "https://www.sheinindia.in/p/443407177_bluewhite?utm_source=share&utm_medium=share"
             },
             {
                 id: 8,
                 title: "Men relaxed Micro Checks Casual Shirt",
                 store: "Myntra",
+                category: "Shirts",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/shirt3.jpeg?raw=true",
                 link: "https://myntr.it/S6ojbWd"
             },
             {
                 id: 9,
-                title: "Men Bold Combo of 3 Clour Black Everyday Scocks",
+                title: "Men Bold Combo of 3 Clour Black Everyday Socks",
                 store: "Myntra",
+                category: "Accessories",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/shocks.jpeg?raw=true",
-                link: "Check out Shein Men Bold Combo of 3 Colour Block Everyday Socks on SHEIN!!: https://sheinindia.onelink.me/ZrSt/9i5iqlti"
+                link: "https://sheinindia.onelink.me/ZrSt/9i5iqlti"
             },
             {
                 id: 10,
                 title: "Women Wide Leg Baggy Jeans High Waist Relaxed Fit Denim Casual Wear",
                 store: "Amazon",
+                category: "Pants & Jeans",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/baggyjeans.jpeg?raw=true",
                 link: "https://link.amazon/B0aMisnmX"
             },
@@ -213,22 +298,66 @@
                 id: 11,
                 title: "Men Boxy Fit Graphic Print Built-up Collar Party Shirt",
                 store: "Flipkart",
+                category: "Shirts",
                 image: "https://github.com/manseng/RangshaCollections/blob/main/shirt5.jpeg?raw=true",
                 link: "https://fktr.in/if8s38v"
             }
         ];
 
+        let selectedCategory = 'All';
+        let searchQuery = '';
         let wishlist = JSON.parse(localStorage.getItem('rangsha_wishlist')) || [];
+
+        function renderFilterBar() {
+            const filterBar = document.getElementById('filter-bar');
+            const categories = ['All', 'Oversized Tees', 'Shirts', 'Pants & Jeans', 'Accessories'];
+
+            filterBar.innerHTML = categories.map(cat => {
+                const count = cat === 'All' 
+                    ? products.length 
+                    : products.filter(p => p.category === cat).length;
+                
+                const isActive = selectedCategory === cat;
+                const btnClass = isActive 
+                    ? 'category-btn border border-brand-dark bg-brand-dark text-white text-xs uppercase tracking-wider px-4 py-2 rounded-full whitespace-nowrap transition-all duration-200'
+                    : 'category-btn border border-[#EBE5D8] bg-white text-brand-dark hover:border-brand-dark text-xs uppercase tracking-wider px-4 py-2 rounded-full whitespace-nowrap transition-all duration-200';
+
+                return `
+                    <button onclick="filterCategory('${cat}')" class="${btnClass}">
+                        ${cat === 'All' ? 'All Finds' : cat} <span class="${isActive ? 'text-stone-300' : 'text-brand-muted'} text-[10px] ml-1">(${count})</span>
+                    </button>
+                `;
+            }).join('');
+        }
 
         function renderProducts() {
             const grid = document.getElementById('product-grid');
-            document.getElementById('product-count').innerText = `${products.length} Items Available`;
             
-            grid.innerHTML = products.map(product => {
+            const filteredProducts = products.filter(p => {
+                const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
+                const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      p.store.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      p.category.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            document.getElementById('product-count').innerText = `${filteredProducts.length} Items Available`;
+            
+            if (filteredProducts.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center text-brand-muted space-y-2">
+                        <i class="fa-solid fa-magnifying-glass text-2xl text-stone-300"></i>
+                        <p class="text-xs uppercase tracking-widest">No products found matching your search</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filteredProducts.map(product => {
                 const isWishlisted = wishlist.some(item => item.id === product.id);
                 return `
                     <div class="group flex flex-col bg-white sm:bg-transparent p-2.5 sm:p-0 rounded-lg sm:rounded-none border border-[#EBE5D8] sm:border-0 shadow-sm sm:shadow-none">
-                        <!-- Image Wrapper (Clickable to open link) -->
+                        <!-- Image Wrapper -->
                         <div class="relative aspect-[4/5] overflow-hidden bg-[#F4EFE6] mb-3 rounded-md sm:rounded-none cursor-pointer" onclick="window.open('${product.link}', '_blank')">
                             <img src="${product.image}" alt="${product.title}" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out">
                             
@@ -236,16 +365,25 @@
                                 ${product.store}
                             </span>
 
-                            <button onclick="event.stopPropagation(); toggleWishlist(${product.id})" class="absolute top-2 right-2 sm:top-4 sm:right-4 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-[#FBF9F5]/90 backdrop-blur-sm flex items-center justify-center text-brand-dark hover:text-brand-accent shadow-sm transition-all duration-300 focus:outline-none">
-                                <i class="${isWishlisted ? 'fa-solid text-brand-accent' : 'fa-regular'} fa-heart text-xs sm:text-base"></i>
-                            </button>
+                            <!-- Action Buttons (Share & Wishlist Heart) -->
+                            <div class="absolute top-2 right-2 sm:top-4 sm:right-4 flex items-center space-x-1.5">
+                                <button onclick="event.stopPropagation(); shareProduct('${product.title}', '${product.link}')" title="Share Product" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#FBF9F5]/90 backdrop-blur-sm flex items-center justify-center text-brand-dark hover:text-brand-accent shadow-sm transition-all duration-300 focus:outline-none">
+                                    <i class="fa-solid fa-share-nodes text-xs sm:text-sm"></i>
+                                </button>
+                                
+                                <button onclick="event.stopPropagation(); toggleWishlist(${product.id})" title="Save to Wishlist" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#FBF9F5]/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all duration-300 focus:outline-none">
+                                    <i class="${isWishlisted ? 'fa-solid text-red-600 scale-110' : 'fa-regular text-brand-dark hover:text-brand-accent'} fa-heart text-xs sm:text-sm transition-transform"></i>
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- Metadata (Clickable title & link) -->
-                        <div class="flex flex-col flex-grow space-y-1">
-                            <h3 class="editorial-title text-sm sm:text-xl text-brand-dark font-normal line-clamp-1 group-hover:text-brand-accent transition-colors cursor-pointer" onclick="window.open('${product.link}', '_blank')">${product.title}</h3>
+                        <!-- Metadata -->
+                        <div class="flex flex-col flex-grow space-y-1.5">
+                            <h3 class="editorial-title text-xs sm:text-base text-brand-dark font-medium leading-snug line-clamp-2 group-hover:text-brand-accent transition-colors cursor-pointer" onclick="window.open('${product.link}', '_blank')" title="${product.title}">
+                                ${product.title}
+                            </h3>
                             
-                            <div class="pt-1">
+                            <div class="pt-1 mt-auto">
                                 <a href="${product.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 sm:space-x-2 text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] font-medium text-brand-dark hover:text-brand-accent transition-colors group/link py-0.5">
                                     <span>Buy on ${product.store}</span>
                                     <i class="fa-solid fa-arrow-right text-[9px] transform group-hover/link:translate-x-1 transition-transform"></i>
@@ -255,6 +393,72 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function filterCategory(category) {
+            selectedCategory = category;
+            renderFilterBar();
+            renderProducts();
+        }
+
+        function handleSearch() {
+            const input = document.getElementById('search-input');
+            const clearBtn = document.getElementById('clear-search');
+            searchQuery = input.value.trim();
+
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            renderProducts();
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('search-input');
+            input.value = '';
+            searchQuery = '';
+            document.getElementById('clear-search').classList.add('hidden');
+            renderProducts();
+        }
+
+        function shareProduct(title, link) {
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: `Check out this find on Rangshacollections: ${title}`,
+                    url: link
+                }).catch(() => {
+                    copyToClipboard(link);
+                });
+            } else {
+                copyToClipboard(link);
+            }
+        }
+
+        function copyToClipboard(link) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(link).then(() => {
+                    showToast("Product link copied to clipboard!");
+                }).catch(() => {
+                    showToast("Unable to copy link.");
+                });
+            } else {
+                showToast("Link copy not supported on this browser.");
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.innerText = message;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 2500);
         }
 
         function toggleWishlist(productId) {
@@ -305,14 +509,14 @@
                         <img src="${item.image}" alt="${item.title}" class="w-14 h-16 object-cover bg-[#F4EFE6] rounded">
                         <div class="space-y-1">
                             <span class="text-[9px] uppercase tracking-widest bg-stone-200 px-2 py-0.5 rounded text-stone-700 font-semibold">${item.store}</span>
-                            <h4 class="editorial-title text-sm text-brand-dark line-clamp-1">${item.title}</h4>
+                            <h4 class="editorial-title text-xs sm:text-sm text-brand-dark line-clamp-2 leading-tight">${item.title}</h4>
                             <span class="text-[10px] uppercase tracking-widest text-brand-accent hover:underline inline-flex items-center space-x-1">
                                 <span>Go to ${item.store}</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                             </span>
                         </div>
                     </div>
-                    <button onclick="toggleWishlist(${item.id})" class="text-brand-muted hover:text-brand-accent p-2">
+                    <button onclick="toggleWishlist(${item.id})" class="text-brand-muted hover:text-red-600 p-2">
                         <i class="fa-solid fa-xmark text-sm"></i>
                     </button>
                 </div>
@@ -327,6 +531,8 @@
             }
         }
 
+        // Initialize application
+        renderFilterBar();
         renderProducts();
         updateWishlistBadge();
     </script>
